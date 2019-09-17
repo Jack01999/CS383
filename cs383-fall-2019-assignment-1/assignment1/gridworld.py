@@ -99,4 +99,7 @@ class Gridworld:
         # TODO
         if self.states[state[0]][state[1]] == 's' or self.states[state[0]][state[1]] == 'g':
             return 1
+        if self.states[state[0]][state[1]] == '#':
+            return 0
+
         return self.states[state[0]][state[1]]
