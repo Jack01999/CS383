@@ -25,10 +25,35 @@ class Gridworld:
         # TODO
         successor_list = []
         size = len(self.states) - 1
+        print("x: ", state[0])
+        print("y: ", state[1])
+        print("cost is:", self.states[1][0])
 
+        if (state[1] == 0) and self.states[state[1]][state[0]] == "#":  # if the state is on the top row
+            if (state[0] == 0):  # if the state is on the upper left corner
+                print ("upper left corner")
+            elif (state[0] == size):  # if the state is on the upper right corner
+                print("upper right corner")
+            else:
+                print("top row")
+        elif state[1] == size:  # if the state is on the bottom row
+            if (state[0] == 0):  # if the state is on the lower left corner
+                print("lower left corner")
+            elif (state[0] == size):  # if the state is on the bottom right corner
+                print("lower right corner")
+            else:
+                print("bottom row")
+        elif state[0] == 0:  # if the state is on the left column
+            print("left column")
+        elif state[0] == size:  # if the state is on the right column
+            print("right column")
+
+
+        '''
         #
         #   CORNER CASES
         #
+        
         if state[0] == 0 and state[1] == 0:  # if the current state is in the upper left corner
             if self.isWall(state[0], state[1] + 1) is False:  # No wall to the right
                 successor_list.append((state[0], state[1] + 1))
@@ -94,6 +119,7 @@ class Gridworld:
                 successor_list.append((state[0], state[1] + 1))
 
         return successor_list
+    '''
 
     def cost(self, state):
         # TODO
