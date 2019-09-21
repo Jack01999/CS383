@@ -27,99 +27,52 @@ class Gridworld:
         size = len(self.states) - 1
         print("x: ", state[0])
         print("y: ", state[1])
-        print("cost is:", self.states[1][0])
+        print("cost is:", self.states[state[1]][state[0]])
 
-        if (state[1] == 0) and self.states[state[1]][state[0]] == "#":  # if the state is on the top row
+        if (state[1] == 0):  # if the state is on the top row
+            if self.isWall(state[1] + 1, state[0]) is False:  # if there is no wall below
+                successor_list.append((state[0], state[1] + 1))
             if (state[0] == 0):  # if the state is on the upper left corner
-                print ("upper left corner")
+                if self.isWall(state[1], state[0] + 1) is False:  # if there is no wall to the right
+                    successor_list.append((state[0] + 1, state[1]))
             elif (state[0] == size):  # if the state is on the upper right corner
-                print("upper right corner")
+                if self.isWall(state[1], state[0] - 1) is False:  # if there is no wall to the left
+                    successor_list.append((state[0] - 1, state[1]))
             else:
-                print("top row")
+                if self.isWall(state[1], state[0] + 1) is False:  # if there is no wall to the right
+                    successor_list.append((state[0] + 1, state[1]))
+                if self.isWall(state[1], state[0] - 1) is False:  # if there is no wall to the left
+                    successor_list.append((state[0] - 1, state[1]))
         elif state[1] == size:  # if the state is on the bottom row
+            if self.isWall(state[1] - 1, state[0]) is False:  # if there is no wall above
+                successor_list.append((state[0], state[1] - 1))
             if (state[0] == 0):  # if the state is on the lower left corner
-                print("lower left corner")
+                if self.isWall(state[1], state[0] + 1) is False:  # if there is no wall to the right
+                    successor_list.append((state[0] + 1, state[1]))
             elif (state[0] == size):  # if the state is on the bottom right corner
-                print("lower right corner")
+                if self.isWall(state[1], state[0] - 1) is False:  # if there is no wall to the left
+                    successor_list.append((state[0] - 1, state[1]))
             else:
-                print("bottom row")
+                if self.isWall(state[1], state[0] + 1) is False:  # if there is no wall to the right
+                    successor_list.append((state[0] + 1, state[1]))
+                if self.isWall(state[1], state[0] - 1) is False:  # if there is no wall to the left
+                    successor_list.append((state[0] - 1, state[1]))
         elif state[0] == 0:  # if the state is on the left column
-            print("left column")
+            if self.isWall(state[1] + 1, state[0]) is False:  # if there is no wall below
+                successor_list.append((state[0], state[1] + 1))
+            if self.isWall(state[1] - 1, state[0]) is False:  # if there is no wall above
+                successor_list.append((state[0], state[1] - 1))
+            if self.isWall(state[1], state[0] + 1) is False:  # if there is no wall to the right
+                successor_list.append((state[0] + 1, state[1]))
         elif state[0] == size:  # if the state is on the right column
-            print("right column")
-
-
-        '''
-        #
-        #   CORNER CASES
-        #
-        
-        if state[0] == 0 and state[1] == 0:  # if the current state is in the upper left corner
-            if self.isWall(state[0], state[1] + 1) is False:  # No wall to the right
+            if self.isWall(state[1] + 1, state[0]) is False:  # if there is no wall below
                 successor_list.append((state[0], state[1] + 1))
-            if self.isWall(state[0] + 1, state[1]) is False:  # No wall below
-                successor_list.append((state[0] + 1, state[1]))
-        elif state[0] == 0 and state[1] == size:  # if the current state is in the upper right corner
-            if self.isWall(state[0], state[1] - 1) is False:  # No wall to the left
+            if self.isWall(state[1] - 1, state[0]) is False:  # if there is no wall above
                 successor_list.append((state[0], state[1] - 1))
-            if self.isWall(state[0] + 1, state[1]) is False:  # No wall below
-                successor_list.append((state[0] + 1, state[1]))
-        elif state[0] == size and state[1] == 0:  # if the current state is in the bottom left corner
-            if self.isWall(state[0] - 1, state[1]) is False:  # No wall above
+            if self.isWall(state[1], state[0] - 1) is False:  # if there is no wall to the left
                 successor_list.append((state[0] - 1, state[1]))
-            if self.isWall(state[0], state[1] + 1) is False:  # No wall to the right
-                successor_list.append((state[0], state[1] + 1))
-        elif state[0] == size and state[1] == size:  # if the current state is in the bottom right corner
-            if self.isWall(state[0] - 1, state[1]) is False:  # No wall above
-                successor_list.append((state[0] - 1, state[1]))
-            if self.isWall(state[0], state[1] - 1) is False:  # No wall to the left
-                successor_list.append((state[0], state[1] - 1))
-        #
-        #    SIDE CASES
-        #
-        elif state[0] == 0:  # if the current state is on the top row
-            if self.isWall(state[0], state[1] - 1) is False:  # No wall to the left
-                successor_list.append((state[0], state[1] - 1))
-            if self.isWall(state[0], state[1] + 1) is False:  # No wall to the right
-                successor_list.append((state[0], state[1] + 1))
-            if self.isWall(state[0] + 1, state[1]) is False:  # No wall below
-                successor_list.append((state[0] + 1, state[1]))
-        elif state[0] == size:  # if the current state is on the bottom row
-            if self.isWall(state[0], state[1] - 1) is False:  # No wall to the left
-                successor_list.append((state[0], state[1] - 1))
-            if self.isWall(state[0], state[1] + 1) is False:  # No wall to the right
-                successor_list.append((state[0], state[1] + 1))
-            if self.isWall(state[0] - 1, state[1]) is False:  # No wall above
-                successor_list.append((state[0] - 1, state[1]))
-        elif state[1] == 0:  # if the current state is on the left column
-            if self.isWall(state[0] - 1, state[1]) is False:  # No wall above
-                successor_list.append((state[0] - 1, state[1]))
-            if self.isWall(state[0] + 1, state[1]) is False:  # No wall below
-                successor_list.append((state[0] + 1, state[1]))
-            if self.isWall(state[0], state[1] + 1) is False:  # No wall to the right
-                successor_list.append((state[0], state[1] + 1))
-        elif state[1] == size:  # if the current state is on the right column
-            if self.isWall(state[0] - 1, state[1]) is False:  # No wall above
-                successor_list.append((state[0] - 1, state[1]))
-            if self.isWall(state[0] + 1, state[1]) is False:  # No wall below
-                successor_list.append((state[0] + 1, state[1]))
-            if self.isWall(state[0], state[1] - 1) is False:  # No wall to the left
-                successor_list.append((state[0], state[1] - 1))
-        #
-        #   EVERYTHING ELSE (MIDDLE PIECES)
-        #
-        else:
-            if self.isWall(state[0] - 1, state[1]) is False:  # No wall above
-                successor_list.append((state[0] - 1, state[1]))
-            if self.isWall(state[0] + 1, state[1]) is False:  # No wall below
-                successor_list.append((state[0] + 1, state[1]))
-            if self.isWall(state[0], state[1] - 1) is False:  # No wall to the left
-                successor_list.append((state[0], state[1] - 1))
-            if self.isWall(state[0], state[1] + 1) is False:  # No wall to the right
-                successor_list.append((state[0], state[1] + 1))
 
         return successor_list
-    '''
 
     def cost(self, state):
         # TODO
@@ -128,4 +81,4 @@ class Gridworld:
         if self.states[state[0]][state[1]] == '#':
             return 0
 
-        return self.states[state[0]][state[1]]
+        return self.states[state[1]][state[0]]
