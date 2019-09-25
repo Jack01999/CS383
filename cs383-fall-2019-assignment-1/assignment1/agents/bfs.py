@@ -7,20 +7,35 @@ class BFS(Agent):
     def search(self, gridworld):
         # TODO
 
+        node = gridworld.initial_state
         frontier = queue.Queue()
-        frontier.put(gridworld.initial_state)
+        frontier.put(node)
         explored = []
+        solution = []
+        cost = 0
+        nodes_expanded = 0
+        parent = {}
 
-        while not frontier.empty():
+        while not node == gridworld.goal_state:
             node = frontier.get()
-            explored += node
-            for n in node:
-                if (n in frontier is False) and (n in explored is False):
+            explored.append(node)
+            for n in gridworld.successors(node):
+                if (n not in frontier.queue) and (n not in explored):
+                    parent[n] = node
                     if n == gridworld.goal_state:
-                        return explored
+                        nodes_expanded = len(explored)
+                        node = gridworld.goal_state
                     else:
-                        frontier += n
+                        frontier.put(n)
 
-        print(frontier.get())
+        currentState = parent.get(gridworld.goal_state)
+        solution.insert(0, gridworld.goal_state)
+        while not currentState == gridworld.initial_state:
+            cost += gridworld.cost(currentState)
+            solution.insert(0, currentState)
+            currentState = parent.get(currentState)
 
-        return False
+        cost += gridworld.cost(gridworld.goal_state)
+        solution.insert(0, gridworld.initial_state)
+
+        return solution, cost, nodes_expanded
