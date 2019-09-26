@@ -1,10 +1,12 @@
 import heapq
 from queue import PriorityQueue
 
+from assignment1 import gridworld
 from .agent import Agent
 
 
 class UCS(Agent):
+
     def search(self, gridworld):
         # TODO
         '''
@@ -24,8 +26,9 @@ class UCS(Agent):
         return failure
         '''
 
+        node = gridworld.initial_state
         frontier = []
-        heapq.heappush(frontier, (0, gridworld.initial_state))
+        heapq.heappush(frontier, (0, node))
         explored = []
         solution = []
         cost = 0
@@ -33,18 +36,43 @@ class UCS(Agent):
 
         while not len(frontier) == 0:
             node = heapq.heappop(frontier)
-            print(node)
-            if node == gridworld.goal_state:
-                return solution
-            explored.append(node)
+            if node[1] == gridworld.goal_state:
+                solution.append(node[1])
+                return solution, cost, nodes_expanded
+            explored.append(node[1])
+            solution.append(node[1])
+            nodes_expanded += 1
+            cost += gridworld.cost(node[1])
             for n in gridworld.successors(node[1]):
-                if (n not in frontier) and (n not in explored):
-                    frontier.append(n)
-                elif (n in frontier) and frontier.get(n) > gridworld.cost(n):
-                    frontier.update(n, gridworld.cost(node))
+                if (not self.is_in_frontier(frontier, n)) and (n not in explored):
+                    heapq.heappush(frontier, (gridworld.cost(n), n))
+                elif (self.is_in_frontier(frontier, n)) and self.get_cost(frontier, n) > gridworld.cost(n):
+                    print(frontier)
+                    self.update_cost(frontier, n, gridworld.cost(node))
+                    print(frontier)
 
-        return
+        return solution, cost, nodes_expanded
 
+    def is_in_frontier(self, frontier, n):
+        a = 0
+        while not a == len(frontier):
+            if frontier[a][1] == n:
+                return True
+            a += 1
 
+        return False
 
+    def get_cost(self, frontier, node):
+        a = 0
+        while not a == len(frontier):
+            if frontier[a][1] == node:
+                return frontier[a][0]
+            a += 1
+
+    def update_cost(self, frontier, node, newCost):
+        a = 0
+        while not a == len(frontier):
+            if frontier[a][1] == node:
+                frontier[a] = (newCost, node)
+            a += 1
 
