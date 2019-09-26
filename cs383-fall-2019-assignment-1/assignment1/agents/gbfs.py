@@ -27,7 +27,6 @@ class GBFS(Agent):
         frontier = []  # initialize heap queue
         node = gridworld.initial_state  # initial state
         heapq.heappush(frontier, (self.checkHeuristic(gridworld, node), node))  # add the initial state into the queue.[ (heuristic, state) ]
-        foundPath = False
         parent = {}
         solution = []
         cost = 0
@@ -37,7 +36,6 @@ class GBFS(Agent):
             node = heapq.heappop(frontier)
             explored.append(node[1])
             successors = gridworld.successors(node[1])
-
             for n in successors:
                 heuristic = self.checkHeuristic(gridworld, n)
                 if (not self.is_in_frontier(frontier, n)) and (n not in explored):
@@ -59,6 +57,4 @@ class GBFS(Agent):
         solution.insert(0, gridworld.initial_state)
 
         return solution, cost, nodes_expanded
-
-
 
