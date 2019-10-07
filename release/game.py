@@ -1,3 +1,7 @@
+"""
+Isolation Game v2
+"""
+
 from collections import namedtuple
 import copy
 import itertools as it
@@ -54,10 +58,6 @@ class Game:
             max_pos=(max_x, max_y),
             min_to_play=True
         )
-
-    def set_init_state(self, state):
-        self.dim = len(state.board)
-        self.init_state = state
 
     def set_init_state(self, state):
         self.dim = len(state.board)
@@ -171,10 +171,13 @@ class Game:
         Call this with verbose=False to disable printing.
         """
         cur_state = self.init_state
+
+        # Set the turn order
+        (p1, p2) = (min, max) if cur_state.min_to_play else (max, min)
+
         num_moves = 0
-        print("its working")
         while True:
-            for player in [min, max]:
+            for player in [p1, p2]:
                 if verbose:
                     self.show(cur_state)
 
