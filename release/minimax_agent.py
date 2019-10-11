@@ -2,6 +2,7 @@ from math import inf
 from agent import Agent
 
 
+
 class MinimaxAgent(Agent):
     depth_limit = None
     eval_fn = None
@@ -12,34 +13,47 @@ class MinimaxAgent(Agent):
         self.eval_fn = eval_fn
         self.prune = prune
 
-    def max_value(self, game, state):
-        if game.is_terminal(state):
+    def max_value(self, depth, game, state):
+        if (game.is_terminal(state) and self.depth_limit == inf):
             return (None, game.utility(state))
+        elif game.is_terminal(state) or depth == self.depth_limit:
+            return (None, self.eval_fn(game, state))
         Utility = float("-inf")
         action = None
         for a in game.get_actions(state):
-            updatedUtility = max(Utility, self.min_value(game, game.apply_action(state, a))[1])
+            updatedUtility = max(Utility, self.min_value(depth + 1, game, game.apply_action(state, a))[1])
             if updatedUtility != Utility:
                 Utility = updatedUtility
                 action = a
         return (action, Utility)
 
-    def min_value(self, game, state):
-        if game.is_terminal(state):
+    def min_value(self, depth, game, state):
+        if (game.is_terminal(state) and self.depth_limit == inf):
             return (None, game.utility(state))
+        elif game.is_terminal(state) or depth == self.depth_limit:
+            return (None, self.eval_fn(game, state))
         Utility = float("inf")
         action = None
         for a in game.get_actions(state):
-            updatedUtility = min(Utility, self.max_value(game, game.apply_action(state, a))[1])
+            updatedUtility = min(Utility, self.max_value(depth + 1, game, game.apply_action(state, a))[1])
             if updatedUtility != Utility:
                 Utility = updatedUtility
                 action = a
         return (action, Utility)
 
     def select_action(self, game, state):
+
+        print(state)
+        print(game.get_actions(state))
+
+        print(state[2])
+
+        return
+        '''
         if (state.min_to_play):
-            return self.min_value(game, state)[0]
-        return self.max_value(game, state)[0]
+            return self.min_value(0, game, state)[0]
+        return self.max_value(0, game, state)[0]
+        '''
         """
         TODO: Implement the minimax algorithm
         """
