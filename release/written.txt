@@ -1,0 +1,37 @@
+"Our heuristic vs. Your heuristic 1"
+	"Depth Limit: 1":
+		Our Heuristic: Lose, Lose, Lose
+		Your Heuristic 1: Win, Win, Win
+	"Depth Limit: 2":
+		Our Heuristic: Lose, Lose, Lose
+		Your Heuristic 1: Win, Win, Win
+	"Depth Limit: 3":
+		Our Heuristic: Lose, Lose, Lose
+		Your Heuristic 1: Win, Win, Win
+Analysis: This heuristic is much more efficient than the Open_cells heuristic. However, when it reaches depth 3+, open_cells works better
+
+
+"Our heuristic vs. Your heuristic 2"
+	"Depth Limit: 1":
+		Our Heuristic: Lose, Lose, Lose
+		Your Heuristic 2: Win, Win, Win
+	"Depth Limit: 2":
+		Our Heuristic: Lose, Lose, Lose
+		Your Heuristic 2: Win, Win, Win
+	"Depth Limit: 3":
+		Our Heuristic: Lose, Lose, Lose
+		Your Heuristic 2: Win, Win, Win
+Analysis: This heuristic is much more efficient than the Open_cells heuristic all around. It even wins for depths 3+.
+
+
+"Your heuristic 1 vs. Your heuristic 2"
+	"Depth Limit: 1":
+		Your Heuristic 1: Lose, Lose, Lose
+		Your heuristic 2: Win, Win, Win
+	"Depth Limit: 2":
+		Your Heuristic 1: Lose, Lose, Lose
+		Your heuristic 2: Win, Win, Win
+	"Depth Limit: 3":
+		Your Heuristic 1: Lose, Lose, Lose
+		Your heuristic 2: Win, Win, Win
+Analysis: Heuristic 2 is much more efficient than my heuristic function 1. It wins in all depths and game dimensions. One thing to note is that depth limit 3, takes a VERY long time to run.
