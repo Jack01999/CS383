@@ -1,7 +1,9 @@
 from math import inf
 from agent import Agent
 
+from collections import namedtuple
 
+State = namedtuple('State', ['board', 'min_pos', 'max_pos', 'min_to_play'])
 
 class MinimaxAgent(Agent):
     depth_limit = None
@@ -40,20 +42,14 @@ class MinimaxAgent(Agent):
                 Utility = updatedUtility
                 action = a
         return (action, Utility)
-
-    def select_action(self, game, state):
-
-        print(state)
-        print(game.get_actions(state))
-
-        print(state[2])
-
-        return
-        '''
+     
+    def select_action(self, game, state):               
         if (state.min_to_play):
             return self.min_value(0, game, state)[0]
         return self.max_value(0, game, state)[0]
-        '''
+        
+
+
         """
         TODO: Implement the minimax algorithm
         """
