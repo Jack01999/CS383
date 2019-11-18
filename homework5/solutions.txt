@@ -1,0 +1,26 @@
+1.You should find, unsurprisingly, that the clusters found correspond very well to the two major political parties (Democrats and
+Republicans). What percentage of congresspeople does your model appear to "correctly" classify? (Hint: You will need to write
+some additional code to compute the answer.)
+	I wrote a function to calculate the number of correct data of republicans/democrats compared to the total and came to the conclusion:
+		Number of correctly classified Republicans: 234
+		Number of total Republicans: 242
+		Percent of correctly classified Republicans to total Republicans: 96.69421487603306%
+
+		Number of correctly classified Democrats: 194
+		Number of total Democrats: 194
+		Percent of correctly classified Democrats to total Democrats: 100.0%
+
+		Percentage of correctly classified congresspeople to total congresspeople: 98.1651376146789%
+
+
+2. Look at the cases where the congresspeople were misclassified. What went wrong? How could our clustering be improved?
+	The congresspeople that were misclassified are IDs: 69, 82, 191, 195, 276, 361, 376, 435.
+	Looking at the cluster values, ~60% of Democrat votes are 0, while only ~20% of Republicans votes are 0. Therefore, when our to_numerical function is converting all "Not Voting", it is siding with the Democrats when it should be neutral.
+	To fix our clustering, I will adjust the to_numerical function to '1' if 'Yes' or 'Aye', '0' if 'No', 'Nay' and '0.5' if 'Not Voting' or 'Present'
+
+3. You may have noticed that some votes were split by cluster, where as others were not. On what percentage of votes did the
+"median" voter in each cluster differ? Based on the description of the votes provided by GovTrack, on what types of votes did
+each party vote the same? On which types of votes did they differ?
+	-The "median" voter in each cluster differ in 64.4% of votes.
+	-It seems like the votes where, if passed, will benefit both parties, the votes are usually one-sided. Both parties vote the same. For example, human rights, empowering students, hospitals.
+	-The votes that differs are the one where it would benefit one party over the other. For example,
