@@ -1,5 +1,6 @@
 import csv
 import math
+import numpy as np
 
 
 class DataSet:
@@ -94,6 +95,7 @@ def learn_decision_tree(dataset, target_name, feature_names, depth_limit):
     def plurality_value(self, examples):
         pass
 
+
     def decision_tree_learning(examples, attrs, parent_examples=(), depth=0):
         """
         This function signature is written to match the pseudocode
@@ -109,25 +111,32 @@ def learn_decision_tree(dataset, target_name, feature_names, depth_limit):
         # You must also implement the entropy and information gain functions below.
         # We recommend adding your own helper functions below too, but don't remove
         # any of the provided code.
-        tree = None
-        print(information_gain(examples, create_children(examples)))
-        '''
-        if len(examples) == 0:
-            plurality_value(parent_examples)
+        
+        if len(examples) == 0 or depth==depth_limit:
+            return
+            #plurality_value(parent_examples)
         #else if all examples have the same classification
-        elif len(attrs) == 0:
-            plurality_value(examples)
+        elif len(attrs) == 0 or depth==depth_limit:
+            return
+            #plurality_value(examples)
         else:
-            A = max(information_gain(attrs, examples))
-            root = Tree()
-            root.data = A
-            for value in A:
-                subtree = decision_tree_learning(exs, attrs - A, examples, depth)
-        '''
-        #print(entropy(examples))
-        #for x in features:
-            #information_gain(examples, examples[x])
+            #for attr in attrs:
+            #    child = create_children(examples, attr)
+            #    importance = information_gain(examples, child)
+            A = choose_attribute(attrs, examples)
+            tree = Node(A, test_name=None)
+            for v_k in A:
+                subtree = decision_tree_learning(examples, attrs - A, examples, depth+1)
+                tree.add(v_k, subtree)
         return tree
+
+    def argmax_random_tie(seq, key=identity):
+        """Return an element with highest fn(seq[i]) score; break ties at random."""
+        return argmax(shuffled(seq), key=key)
+
+    def choose_attribute(attrs, examples):
+        """Choose the attribute with the highest information gain."""
+        return argmax_random_tie(attrs, key=lambda a: information_gain(a, examples))
 
     def count_majority(examples, i):
         yes_counter = 0
@@ -141,37 +150,37 @@ def learn_decision_tree(dataset, target_name, feature_names, depth_limit):
             return True
         return False
 
-    def create_children(examples):
-        new_split = []
+    def create_children(examples, i):
+        yes_split = []
+        no_split = []
         for example in examples:
-            if count_majority(examples, 4) == True: 
-                if (example[4] == 'Yea' or example[4] == 'Not Voting' or example[4] == 'Present' or example[4] == ''):
-                    new_split.append(example)
+            if count_majority(examples, i) == True: 
+                if (example[i] != 'Nay'):
+                    yes_split.append(example)
+                else:
+                    no_split.append(example)
             else:
-                if (example[4] == 'Nay' or example[4] == 'Not Voting' or example[4] == 'Present' or example[4] == ''):
-                    new_split.append(example)
-        print(new_split)
-        return new_split
-
-    def find_probability(examples, party):
-        party_counter = 0
-
-        for example in examples:
-            if example[target] == party:
-                party_counter += 1
-
-        return party_counter
+                if (example[i] == 'Not Voting' or example[i] == 'Present' or example[i] == ''):
+                    no_split.append(example)
+        return [yes_split, no_split]
 
     def entropy(examples):
         """Takes a list of examples and returns their entropy with respect to the target attribute"""
 
         # TODO: Implement the entropy function
-        republican_counter = find_probability(examples, 'Republican')
-        democrat_counter = find_probability(examples, 'Democrat')
+        republican_counter = 0
+        democrat_counter = 0
+
+        for example in examples:
+            if example[target] == 'Republican':
+                republican_counter += 1
+            if example[target] == 'Democrat':
+                democrat_counter += 1
 
         p1 = republican_counter / len(examples)
         p2 = democrat_counter / len(examples)
-
+        if (p1 == 0 or p2 == 0):
+            return 0
         return ((p1 * math.log2(p1)) + (p2 * math.log2(p2))) * -1
 
 
@@ -182,17 +191,11 @@ def learn_decision_tree(dataset, target_name, feature_names, depth_limit):
         """
 
         # TODO: Implement the information gain
-
         parent_entropy = entropy(parent)
-
-        # yes = child1
-        # no = child2
-        children_entropy = entropy(children)
-        children_prob = (find_probability(children, 'Republican') + find_probability(children, 'Democrat')) / (find_probability(parent, 'Republican') + find_probability(parent, 'Democrat'))
-        parent_entropy -= (children_entropy * children_prob)
-        print((find_probability(children, 'Republican') + find_probability(children, 'Democrat')))
-
-
+        children_val = 0
+        for child in children:
+            children_val += (entropy(child) * len(child)/len(parent))
+        parent_entropy -= children_val
         return parent_entropy
 
 
